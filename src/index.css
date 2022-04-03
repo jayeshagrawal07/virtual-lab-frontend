@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.navbar{
+  padding-top: 0rem;
+}
+.e7070742{
+padding: 8px 0;
+border-width: 10px 0 0;
+border-top-style: solid;
+-o-border-image: linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3;
+border-image: linear-gradient(139deg, #fb8817, #ff4b01, #c12127, #e02aff) 3;
+}
+
+.f7728d4c {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+._8c1ee087 {
+  background-image: linear-gradient( 270deg, rgba(176, 42, 42, .16) 0%, rgba(176, 42, 42, .56) 18.45%, rgba(176, 42, 42, .8) 49.67%, rgba(176, 42, 42, .56) 82.52%, rgba(176, 42, 42, .196364) 99.7%, rgba(189, 40, 40, 0) 99.71%, rgba(203, 56, 55, 0) 99.72%, rgba(203, 56, 55, .16) 99.73%), url(https://static.npmjs.com/abf53a3….png);
+}
+
+.nav{
+  justify-content: right;
+}
+.img2{
+  height: 4rem;
+  width: 4rem;
+}
+.image1{
+  width: 4rem;
+}
+/* icons */
+.bi-twitter{
+  font-size: 1rem;
+  color: cornflowerblue;
+}
+.bi-instagram{
+  font-size: 1rem;
+  color: red;
+  
+}
+.bi-google{
+  font-size: 1rem;
+  color: green;
+}
+.bi-facebook{
+  font-size: 1rem;
+  color: blue;
+}
+.bi-linkedin{
+  font-size: 1rem;
+  color: darkblue;
+}
+.bi-github{
+  font-size: 1rem;
+  color: black;
+}
+
+
+.bi-geo-alt-fill{
+  font-size: 1rem;
+  color: blue;
+}
+.bi-envelope-fill{
+  font-size: 1rem;
+  color: blue;
+}
+.bi-telephone-fill{
+  font-size: 1rem;
+  color: blue;
+}
