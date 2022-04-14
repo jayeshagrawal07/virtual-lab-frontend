@@ -14,25 +14,23 @@ function Footer() {
      
   
       <div>
-        <a href="https://www.facebook.com/PIEMR/" className="me-4 text-reset">
+        <a href="https://www.facebook.com/PIEMR/" target="blank" className="me-4 text-reset">
         <i className="bi bi-facebook"/>
         </a>
-        <a href="https://twitter.com/piemr_indore?lang=en" className="me-4 text-reset">
+        <a href="https://twitter.com/piemr_indore?lang=en"target="blank"  className="me-4 text-reset">
          <i className="bi bi-twitter"/>
         </a>
-        <a href="https://www.piemr.edu.in/" className="me-4 text-reset">
+        <a href="https://www.piemr.edu.in/" target="blank" className="me-4 text-reset">
         <i className="bi bi-google"/>
         </a>
 
-        <a href="https://www.instagram.com/piemr_indore/" className="me-4 text-reset">
+        <a href="https://www.instagram.com/piemr_indore/" target="blank"  className="me-4 text-reset">
         <i className="bi bi-instagram"/>
         </a>
-        <a href="https://in.linkedin.com/school/piemr/" className="me-4 text-reset">
+        <a href="https://in.linkedin.com/school/piemr/" target="blank" className="me-4 text-reset">
         <i className="bi bi-linkedin "/>
         </a>
-        <a href="" className="me-4 text-reset">
-        <i className="bi bi-github"/>
-        </a>
+        
       </div>
      
     </section>
@@ -73,10 +71,10 @@ function Footer() {
      
           <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
             <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
-            <p><a href="http://183.182.87.181/Accsoft2/Login.aspx" className="text-reset">AccSoft(Staff/Faculty)</a></p>
-            <p><a href="http://183.182.87.181/Accsoft2/studentLogin.aspx" className="text-reset">AccSoft (Students/Parents)</a></p>
-            <p><a href="https://www.piemr.edu.in/?departments=computer-science-engineering-2" className="text-reset">Computer Science & Engineering</a> </p>
-            <p><a href="http://111.118.241.141/moodle/" className="text-reset">MOODLE</a></p>
+            <p><a href="http://183.182.87.181/Accsoft2/Login.aspx" target="blank" className="text-reset">AccSoft(Staff/Faculty)</a></p>
+            <p><a href="http://183.182.87.181/Accsoft2/studentLogin.aspx" target="blank" className="text-reset">AccSoft (Students/Parents)</a></p>
+            <p><a href="https://www.piemr.edu.in/?departments=computer-science-engineering-2" target="blank" className="text-reset">Computer Science & Engineering</a> </p>
+            <p><a href="http://111.118.241.141/moodle/" target="blank" className="text-reset">MOODLE</a></p>
           </div>
   
           <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">  

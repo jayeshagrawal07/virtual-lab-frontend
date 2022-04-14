@@ -36,11 +36,20 @@ function NavBar() {
             </li>
            <li className= "nav-item">          
               <Nav.Link  href='/ContactUs'>ContactUs</Nav.Link>
-            </li> 
-            <li className= "nav-item">          
-            <Link  to="/signup" className="btn btn-primary">Signup</Link> 
             </li>
-            
+            {userInfo ? ( 
+      <div></div>
+
+
+    ):(
+
+      <li className= "nav-item">          
+      <Link  to="/signup" className="btn btn-primary">Signup</Link> 
+      </li>
+
+    )}
+ 
+           
               
     {userInfo ? ( 
          <NavDropdown title={userInfo.name} id='name'>
@@ -53,7 +62,7 @@ function NavBar() {
 
 
     ):(
-  
+
       <li className= "nav-item">          
       <Link  to="/user/login" className="btn btn-primary">Login</Link> 
       </li>

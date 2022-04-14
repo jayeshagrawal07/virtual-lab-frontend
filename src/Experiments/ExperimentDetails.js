@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap'
 import  { useParams ,Link } from 'react-router-dom'
 function ExperimentDetails() {
     const { id } = useParams();
-    const experiment  = experiments.find((p) =>p._id == id)
+    const experiment  = experiments.find((p) =>p._id === id)
   return (
 <Container >
     <div className ="row g-5">
@@ -24,15 +24,22 @@ function ExperimentDetails() {
         
         <h5>{experiment.heading2}</h5>
         <p>{experiment.paragraph2}</p>
-       
+        <img  className="mt-3  mb-3"  src={experiment.img1} alt="exp img"/>
         <h5>{experiment.heading3}</h5>
         <p>{experiment.paragraph3}</p>
-        
+        <img className="mt-3  mb-3" src={experiment.img2} alt="exp img"/>
+        <h5>{experiment.heading3}</h5>
+        <p>{experiment.paragraph3}</p>
+        <img>{experiment.img3}</img>
+
       </article>
 
     </div>
   </div>
-    <Link className="btn btn-primery" to={`/experiments`}>Go Back</Link>
+  <div className="d-flex gap-2 ">
+    <Link className="btn btn-primary mb-5 mt-4  " to={`/experiments`}>Go Back</Link>
+    <Link className="btn btn-primary mb-5 mt-4  " to={`/simulation`}>Simulation</Link>
+</div>
 </Container>
   )
 }
