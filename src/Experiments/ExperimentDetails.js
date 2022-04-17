@@ -1,7 +1,7 @@
 import React from 'react'
 import experiments from '../experiments'
 import { Container } from 'react-bootstrap'
-import  { useParams ,Link } from 'react-router-dom'
+import  { useParams ,Link as a } from 'react-router-dom'
 function ExperimentDetails() {
     const { id } = useParams();
     const experiment  = experiments.find((p) =>p._id === id)
@@ -37,8 +37,9 @@ function ExperimentDetails() {
     </div>
   </div>
   <div className="d-flex gap-2 ">
-    <Link className="btn btn-primary mb-5 mt-4  " to={`/experiments`}>Go Back</Link>
-    <Link className="btn btn-primary mb-5 mt-4  " to={`/simulation`}>Simulation</Link>
+    <a className="btn btn-primary mb-5 mt-4  " to={`/experiments`}>Go Back</a>
+    {/*<Link className="btn btn-primary mb-5 mt-4  " to={`/simulation`}>Simulation</Link>*/}
+    <a className="btn btn-primary mb-5 mt-4  " href={`/simulation`}>Simulation</a>
 </div>
 </Container>
   )

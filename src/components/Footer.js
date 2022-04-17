@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap'
 function Footer() {
   return (
       <>
-    <footer className="text-center text-lg-start bg-light text-muted">
+    <footer className="text-center text-lg-start bg-light text-muted mt-3">
     <Container>
       <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
     
