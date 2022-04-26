@@ -52,8 +52,8 @@ function SimulationScreen() {
 
   const handelValidate = async () => {
     try {
-      let res = await axios.post("http://127.0.0.1:5050/api/isNFA", {
-        nfa_data: JSON.parse(localStorage.getItem("fsm")),
+      let res = await axios.post("http://127.0.0.1:5050/api/isDFA", {
+        data: JSON.parse(localStorage.getItem("fsm")),
       });
       console.log("res", res);
     } catch (e) {
@@ -65,9 +65,9 @@ function SimulationScreen() {
     try {
       let res = await axios.post(
         // "http://127.0.0.1:5050/api/isNfaAccept_input",
-        "http://127.0.0.1:5050/api/isNfaRead_input",
-        {
-          nfa_data: JSON.parse(localStorage.getItem("fsm")),
+        "http://127.0.0.1:5050/api/Test",
+        { type:'DFA_NFA',
+          data: JSON.parse(localStorage.getItem("fsm")),
           input_string: input,
         }
       );
