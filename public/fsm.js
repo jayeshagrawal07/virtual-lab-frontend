@@ -26,46 +26,6 @@
  OTHER DEALINGS IN THE SOFTWARE.
 */
 
-function drawArrow2(ctx, fromx, fromy, tox, toy){
-    //variables to be used when creating the arrow
-	console.log(fromx, fromy, tox, toy);
-    var headlen = 10;
-    var angle = Math.atan2(toy-fromy,tox-fromx);
- 
-    // ctx.save();
-    // ctx.strokeStyle = "black";
- 
-    //starting path of the arrow from the start square to the end square
-    //and drawing the stroke
-    ctx.beginPath();
-    ctx.moveTo(fromx, fromy);
-    ctx.lineTo(tox, toy);
-    // ctx.lineWidth = 13;
-    ctx.stroke();
- 
-    //starting a new path from the head of the arrow to one of the sides of
-    //the point
-    ctx.beginPath();
-    ctx.moveTo(tox, toy);
-    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
-               toy-headlen*Math.sin(angle-Math.PI/7));
- 
-    //path from the side point of the arrow, to the other side point
-    ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),
-               toy-headlen*Math.sin(angle+Math.PI/7));
- 
-    //path from the side point back to the tip of the arrow, and then
-    //again to the opposite side point
-    ctx.lineTo(tox, toy);
-    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
-               toy-headlen*Math.sin(angle-Math.PI/7));
- 
-    //draws the paths created above
-    ctx.stroke();
-    // ctx.restore();
-}
-
-
 // draw using this instead of a canvas and call toLaTeX() afterward
 function ExportAsLaTeX() {
 	this._points = [];
@@ -265,6 +225,33 @@ function ExportAsSVG() {
 
 	this.save = this.restore = this.clearRect = function(){};
 }
+
+availableIndexes = [];
+
+const findIndex = (arr, val) => {
+	let low = 0, high = arr.length;
+	while (low < high) {
+	   let mid = (low + high) >>> 1;
+	   if (arr[mid] < val) {
+		  low = mid + 1;
+	   }else {
+		  high = mid
+	   }
+	};
+	return low;
+ };
+
+ const insertAvailableIndex = (num) => {
+	const position = findIndex(availableIndexes, num);
+	for(let i = position; typeof availableIndexes[i] !== 'undefined'; i++){
+	   // swapping without using third variable
+	   num += availableIndexes[i];
+	   availableIndexes[i] = num - availableIndexes[i];
+	   num -= availableIndexes[i];
+	};
+	availableIndexes.push(num);
+ };
+ 
 
 function StartLink(node, start) {
 	this.node = node;
@@ -483,6 +470,7 @@ function Node(x, y) {
 	this.isAcceptState = false;
 	this.isInitialState = false;
 	this.text = '';
+	this.index = null;
 }
 
 Node.prototype.setMouseStart = function(x, y) {
@@ -634,6 +622,7 @@ function restoreBackup() {
 			node.isAcceptState = backupNode.isAcceptState;
 			node.isInitialState = backupNode.isInitialState;
 			node.text = backupNode.text;
+			node.index = backupNode.index;
 			nodes.push(node);
 		}
 		for(var i = 0; i < backup.links.length; i++) {
@@ -672,12 +661,14 @@ function saveBackup() {
 	var backup = {
 		'nodes': [],
 		'links': [],
+		'availableIndexes': availableIndexes,
 	};
 	for(var i = 0; i < nodes.length; i++) {
 		var node = nodes[i];
 		var backupNode = {
 			'x': node.x,
 			'y': node.y,
+			'index': node.index,
 			'text': node.text,
 			'isAcceptState': node.isAcceptState,
 			'isInitialState': node.isInitialState,
@@ -950,7 +941,11 @@ window.onload = function() {
 			if(nodes.length === 0){
 				selectedObject.isInitialState = true;
 			}
-			selectedObject.text = `q${nodes.length}`
+			let index = availableIndexes.shift()
+			let indexValue = (!index && index !== 0)?nodes.length:index
+			selectedObject.text = `q${indexValue}`
+			selectedObject.index = indexValue
+			console.log("add",availableIndexes);
 			nodes.push(selectedObject);
 			resetCaret();
 			draw();
@@ -1032,11 +1027,17 @@ document.onkeydown = function(e) {
 		return false;
 	} else if(key == 46) { // delete key
 		if(selectedObject != null) {
+			console.log(availableIndexes)
 			for(var i = 0; i < nodes.length; i++) {
 				if(nodes[i] == selectedObject) {
+					insertAvailableIndex(nodes[i].index);
+					if(nodes[i].isInitialState && nodes.length>1){
+						nodes[i+1].isInitialState = true;
+					}
 					nodes.splice(i--, 1);
 				}
 			}
+			console.log(availableIndexes)
 			for(var i = 0; i < links.length; i++) {
 				if(links[i] == selectedObject || links[i].node == selectedObject || links[i].nodeA == selectedObject || links[i].nodeB == selectedObject) {
 					links.splice(i--, 1);
