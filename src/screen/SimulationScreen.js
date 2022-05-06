@@ -70,6 +70,7 @@ function SimulationScreen() {
   const [message, setMessage] = useState("Test Message");
   const [toastVariant, setToastVariant] = useState("success");
   const [input, setInput] = useState("");
+  const [type, setType] = useState("");
   const [inputArray, setInputArray] = useState([]);
 
   const handleClose = () => setShow(false);
@@ -77,7 +78,7 @@ function SimulationScreen() {
 
   useEffect(() => {
     localStorage.clear();
-    console.log(searchParams.get("type"));
+    setType(searchParams.get("type")||"DFA");
     // localStorage.setItem(
     //   "fsm",
     //   '{"nodes":[{"x":328,"y":140,"index":0,"text":"q0","isAcceptState":false,"isInitialState":true},{"x":780,"y":132,"index":2,"text":"q2","isAcceptState":false,"isInitialState":false},{"x":770,"y":423,"index":3,"text":"q3","isAcceptState":false,"isInitialState":false},{"x":328,"y":296,"index":1,"text":"q1","isAcceptState":false,"isInitialState":false},{"x":536,"y":259,"index":4,"text":"q4","isAcceptState":false,"isInitialState":false},{"x":913,"y":259,"index":5,"text":"q5","isAcceptState":false,"isInitialState":false}],"links":[],"availableIndexes":[]}'
@@ -123,17 +124,19 @@ function SimulationScreen() {
 
   const handelTest = async () => {
     try {
-      if (input) console.log([...inputArray, input]);
-      else console.log(inputArray);
-      // let res = await axios.post(
-      //   // "http://127.0.0.1:5050/api/isNfaAccept_input",
-      //   "http://127.0.0.1:5050/api/isNfaRead_input",
-      //   {
-      //     nfa_data: JSON.parse(localStorage.getItem("fsm")),
-      //     input_string: input,
-      //   }
-      // );
-      // console.log("res", res);
+      let data;
+      if (input) data = [...inputArray, input];
+      else data = inputArray;
+      let res = await axios.post(
+        // "http://127.0.0.1:5050/api/isNfaAccept_input",
+        "http://127.0.0.1:5050/api/Test",
+        {
+          data: JSON.parse(localStorage.getItem("fsm")),
+          input_string: data,
+          type
+        }
+      );
+      console.log("res", res);
     } catch (e) {
       console.log("error", e);
     }
