@@ -13,6 +13,7 @@ import {
   useAccordionButton,
 } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import { TYPES } from "../constants/userConstants";
 
 function useWindowDimensions() {
   const hasWindow = typeof window !== "undefined";
@@ -62,23 +63,32 @@ function Icon({ initialClass, onHoverClass, handelInputButton }) {
 }
 
 function SimulationScreen() {
+  const initInput = { value: "", test: null };
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { height, width } = useWindowDimensions();
   const [show, setShow] = useState(false);
-  const [showToast, setShowToast] = useState(true);
+  const [showOutputModal, setShowOutputModal] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("Test Message");
   const [toastVariant, setToastVariant] = useState("success");
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initInput);
   const [type, setType] = useState("");
+  const [imageData, setImageData] = useState("");
   const [inputArray, setInputArray] = useState([]);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (toConvertFlag = false) => {
+    if (toConvertFlag) {
+      handelTest(toConvertFlag);
+    }
+    setShow(true);
+  };
 
   useEffect(() => {
     localStorage.clear();
-    setType(searchParams.get("type")||"DFA");
+    setType(searchParams.get("type") || "DFA");
     // localStorage.setItem(
     //   "fsm",
     //   '{"nodes":[{"x":328,"y":140,"index":0,"text":"q0","isAcceptState":false,"isInitialState":true},{"x":780,"y":132,"index":2,"text":"q2","isAcceptState":false,"isInitialState":false},{"x":770,"y":423,"index":3,"text":"q3","isAcceptState":false,"isInitialState":false},{"x":328,"y":296,"index":1,"text":"q1","isAcceptState":false,"isInitialState":false},{"x":536,"y":259,"index":4,"text":"q4","isAcceptState":false,"isInitialState":false},{"x":913,"y":259,"index":5,"text":"q5","isAcceptState":false,"isInitialState":false}],"links":[],"availableIndexes":[]}'
@@ -111,41 +121,74 @@ function SimulationScreen() {
     );
   }
 
-  const handelValidate = async () => {
-    try {
-      let res = await axios.post("http://127.0.0.1:5050/api/isDFA", {
-        data: JSON.parse(localStorage.getItem("fsm")),
-      });
-      console.log("res", res);
-    } catch (e) {
-      console.log("error", e);
-    }
-  };
+  // const handelValidate = async () => {
+  //   try {
+  //     let res = await axios.post("http://127.0.0.1:5050/api/isDFA", {
+  //       data: JSON.parse(localStorage.getItem("fsm")),
+  //     });
+  //     console.log("res", res);
+  //   } catch (e) {
+  //     console.log("error", e);
+  //   }
+  // };
 
-  const handelTest = async () => {
+  const handelTest = async (toConvertFlag = false) => {
     try {
       let data;
-      if (input) data = [...inputArray, input];
-      else data = inputArray;
+      if (input.value) data = [...inputArray, input].map(({ value }) => value);
+      else data = inputArray.map(({ value }) => value);
       let res = await axios.post(
         // "http://127.0.0.1:5050/api/isNfaAccept_input",
         "http://127.0.0.1:5050/api/Test",
         {
           data: JSON.parse(localStorage.getItem("fsm")),
-          input_string: data,
-          type
+          input_string: toConvertFlag ? "" : data,
+          type,
         }
       );
+      if (!res.data.res) {
+        throw res.data.msg;
+      }
+      if (!toConvertFlag) {
+        if (input.value) {
+          data = inputArray.map((data, i) => {
+            data.test = res.data.res[i];
+            return data;
+          });
+          let inputData = { ...input };
+          inputData.test = res.data.res[inputArray.length];
+          setInputArray(data);
+          setInput(inputData);
+        } else {
+          data = inputArray.map((data, i) => {
+            data.test = res.data.res[i];
+            return data;
+          });
+          setInputArray(data);
+        }
+        setReset(true);
+        setMessage("Test Successful");
+        setToastVariant("success");
+        setShowToast(true);
+      } else {
+        setMessage("Converted Successfully");
+        setToastVariant("success");
+        setShowToast(true);
+        setImageData(res.data.converted);
+      }
       console.log("res", res);
     } catch (e) {
+      setMessage(e.toString());
+      setToastVariant("danger");
+      setShowToast(true);
       console.log("error", e);
     }
   };
 
   const handelAddInput = () => {
-    if (input) {
+    if (input.value) {
       setInputArray([...inputArray, input]);
-      setInput("");
+      setInput(initInput);
     }
   };
 
@@ -153,6 +196,12 @@ function SimulationScreen() {
     let temp = [...inputArray];
     temp.splice(index, 1);
     setInputArray(temp);
+  };
+
+  const handelReset = () => {
+    setInputArray([]);
+    setInput(initInput);
+    setReset(false);
   };
 
   return (
@@ -222,76 +271,109 @@ function SimulationScreen() {
           </span>
         </canvas>
       </div>
-      {/*<button disabled={true} className="btn btn-primary mb-5 mt-4 ms-4"></button>*/}
+
       <Button
         className="mb-5 mt-4 ms-4"
         variant="primary"
-        onClick={handelValidate}
+        onClick={() => handleShow(TYPES.NFA_DFA === type)}
       >
-        Validate
+        {TYPES.NFA_DFA !== type ? "Test" : "Convert"}
       </Button>
-      <Button className="mb-5 mt-4 ms-4" variant="primary" onClick={handleShow}>
-        Test
-      </Button>
+      {/*TYPES.DFA_NFA === type && <Button className="mb-5 mt-4 ms-4" variant="primary" onClick={handleShow}>
+        Convert
+    </Button>*/}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              {inputArray.map((item, i) => (
-                <InputGroup key={i} className="mb-3">
+          {TYPES.NFA_DFA !== type && (
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                {inputArray.map((item, i) => (
+                  <InputGroup key={i} className="mb-3">
+                    <FormControl
+                      placeholder="Input"
+                      className={
+                        item.test !== null &&
+                        (item.test
+                          ? "bg-success text-light"
+                          : "bg-danger text-light")
+                      }
+                      value={item.value}
+                      onChange={(e) => {
+                        let temp = [...inputArray];
+                        temp[i] = e.target.value;
+                        setInputArray(temp);
+                      }}
+                      onBlur={() => {
+                        if (!item.value) {
+                          handelRemoveInput(i);
+                        }
+                      }}
+                    />
+                    <Icon
+                      initialClass={"bi-dash-circle"}
+                      onHoverClass={"bi-dash-circle-fill"}
+                      handelInputButton={() => {
+                        handelRemoveInput(i);
+                      }}
+                    />
+                  </InputGroup>
+                ))}
+                <InputGroup className="mb-3">
                   <FormControl
                     placeholder="Input"
-                    value={item}
-                    onChange={(e) => {
-                      let temp = [...inputArray];
-                      temp[i] = e.target.value;
-                      setInputArray(temp);
-                    }}
-                    onBlur={() => {
-                      if (!item) {
-                        handelRemoveInput(i);
-                      }
-                    }}
+                    className={
+                      input.test !== null &&
+                      (input.test
+                        ? "bg-success text-light"
+                        : "bg-danger text-light")
+                    }
+                    value={input.value}
+                    onChange={(e) =>
+                      setInput({ value: e.target.value, test: null })
+                    }
                   />
                   <Icon
-                    initialClass={"bi-dash-circle"}
-                    onHoverClass={"bi-dash-circle-fill"}
-                    handelInputButton={() => {
-                      handelRemoveInput(i);
-                    }}
+                    initialClass={"bi-plus-circle"}
+                    onHoverClass={"bi-plus-circle-fill"}
+                    handelInputButton={handelAddInput}
                   />
                 </InputGroup>
-              ))}
-              <InputGroup className="mb-3">
-                <FormControl
-                  placeholder="Input"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-                <Icon
-                  initialClass={"bi-plus-circle"}
-                  onHoverClass={"bi-plus-circle-fill"}
-                  handelInputButton={handelAddInput}
-                />
-              </InputGroup>
-            </Form.Group>
-          </Form>
+              </Form.Group>
+            </Form>
+          )}
+          {TYPES.NFA_DFA === type && (
+            <img
+              src={imageData}
+              alt="Converted Image"
+              style={{ width: "-webkit-fill-available" }}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant={TYPES.NFA_DFA === type ? "primary" : "secondary"}
+            onClick={handleClose}
+          >
             Close
           </Button>
-          <Button
-            variant="primary"
-            disabled={!(inputArray.length || input)}
-            onClick={handelTest}
-          >
-            Save Changes
-          </Button>
+          {!reset && TYPES.NFA_DFA !== type && (
+            <Button
+              variant="primary"
+              disabled={!(inputArray.length || input.value)}
+              onClick={() => handelTest(false)}
+            >
+              Test
+            </Button>
+          )}
+          {reset && TYPES.NFA_DFA !== type && (
+            <Button variant="primary" onClick={handelReset}>
+              Reset
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>

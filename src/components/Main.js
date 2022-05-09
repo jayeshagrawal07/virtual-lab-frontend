@@ -18,7 +18,7 @@ return (
           <div className="card-body">
             <h5 className="card-title ">Introduction</h5>
             <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="/" className="btn btn-primary">Read More...</a>
+            <a href="#" className="btn btn-primary">Read More...</a>
           </div>
       </div>
       </div>
@@ -29,7 +29,7 @@ return (
               <div className="card-body">
               <h5 className="card-title ">List Of Experiments</h5>
               <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>        
-                 <Link  to="/experiments" className="btn btn-primary">Open List</Link>                
+                 <a  href="/experiments#" className="btn btn-primary">Open List</a>                
               </div>
           </div>
       </div>
