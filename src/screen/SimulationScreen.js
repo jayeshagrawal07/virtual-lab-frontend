@@ -9,6 +9,7 @@ import {
   FormControl,
   InputGroup,
   Modal,
+  Table,
   Toast,
   useAccordionButton,
 } from "react-bootstrap";
@@ -79,6 +80,10 @@ function SimulationScreen() {
   const [inputArray, setInputArray] = useState([]);
 
   const handleClose = () => setShow(false);
+  const handleOutputModalClose = () => {
+    handelReset();
+    setShowOutputModal(false);
+  };
   const handleShow = (toConvertFlag = false) => {
     if (toConvertFlag) {
       handelTest(toConvertFlag);
@@ -121,31 +126,16 @@ function SimulationScreen() {
     );
   }
 
-  // const handelValidate = async () => {
-  //   try {
-  //     let res = await axios.post("http://127.0.0.1:5050/api/isDFA", {
-  //       data: JSON.parse(localStorage.getItem("fsm")),
-  //     });
-  //     console.log("res", res);
-  //   } catch (e) {
-  //     console.log("error", e);
-  //   }
-  // };
-
   const handelTest = async (toConvertFlag = false) => {
     try {
       let data;
       if (input.value) data = [...inputArray, input].map(({ value }) => value);
       else data = inputArray.map(({ value }) => value);
-      let res = await axios.post(
-        // "http://127.0.0.1:5050/api/isNfaAccept_input",
-        "http://127.0.0.1:5050/api/Test",
-        {
-          data: JSON.parse(localStorage.getItem("fsm")),
-          input_string: toConvertFlag ? "" : data,
-          type,
-        }
-      );
+      let res = await axios.post("http://127.0.0.1:5050/api/Test", {
+        data: JSON.parse(localStorage.getItem("fsm")),
+        input_string: toConvertFlag ? "" : data,
+        type,
+      });
       if (!res.data.res) {
         throw res.data.msg;
       }
@@ -170,6 +160,9 @@ function SimulationScreen() {
         setMessage("Test Successful");
         setToastVariant("success");
         setShowToast(true);
+        if (TYPES.MOORE === type || TYPES.MEALY === type) {
+          setShowOutputModal(true);
+        }
       } else {
         setMessage("Converted Successfully");
         setToastVariant("success");
@@ -283,9 +276,15 @@ function SimulationScreen() {
         Convert
     </Button>*/}
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        className={showOutputModal ? "d-none" : ""}
+        show={show}
+        onHide={handleClose}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>
+            {TYPES.NFA_DFA !== type ? "Input Data" : "Converted Data"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {TYPES.NFA_DFA !== type && (
@@ -374,6 +373,43 @@ function SimulationScreen() {
               Reset
             </Button>
           )}
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showOutputModal} onHide={handleOutputModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Outputs</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Input</th>
+                <th>Output</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inputArray.map((item, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{item.value}</td>
+                  <td>{item.test}</td>
+                </tr>
+              ))}
+              {input.value && (
+                <tr>
+                  <td>{inputArray.length + 1}</td>
+                  <td>{input.value}</td>
+                  <td>{input.test}</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleOutputModalClose}>
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

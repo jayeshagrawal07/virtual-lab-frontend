@@ -41,7 +41,7 @@ function Footer() {
   
         <div className="row mt-3">
         
-          <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <div className="col-md-4 col-lg-5 col-xl-4 mx-auto mb-4">
             
             <h6 className="text-uppercase fw-bold mb-4">
              <img  className="img2" src="/images/logo.jpg"/><br/>Prestige Institute Of Engineering Management And Research
@@ -50,26 +50,7 @@ function Footer() {
             <p> Below you can see the necessary information if you like to contact us.</p>
           </div>
          
-          <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-           
-            <h6 className="text-uppercase fw-bold mb-4">
-              Products
-            </h6>
-            <p>
-              <a href="#!" className="text-reset">Angular</a>
-            </p>
-            <p>
-              <a href="#!" className="text-reset">React</a>
-            </p>
-            <p>
-              <a href="#!" className="text-reset">Vue</a>
-            </p>
-            <p>
-              <a href="#!" className="text-reset">Laravel</a>
-            </p>
-          </div>
-     
-          <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-4">
             <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
             <p><a href="http://183.182.87.181/Accsoft2/Login.aspx" target="blank" className="text-reset">AccSoft(Staff/Faculty)</a></p>
             <p><a href="http://183.182.87.181/Accsoft2/studentLogin.aspx" target="blank" className="text-reset">AccSoft (Students/Parents)</a></p>
