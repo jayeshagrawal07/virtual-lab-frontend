@@ -4,17 +4,6 @@ import { createSearchParams, useNavigate, Link } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
 
 function ExperimentScreen() {
-  const navigate = useNavigate();
-
-  const handelSimulation = (type) => {
-    navigate({
-      pathname: "/simulation",
-      search: `?${createSearchParams({
-        type,
-      })}`,
-    });
-  };
-
   return (
     <Container>
       <div className="row mb-2">
@@ -42,12 +31,20 @@ function ExperimentScreen() {
                   >
                     Continue Reading
                   </Link>
-                  {experiment.simulation && (
+                  {/*experiment.simulation && (
                     <Button
                       onClick={() => handelSimulation(experiment.simulation)}
                     >
                       Simulation
                     </Button>
+                  )*/}
+                  {experiment.simulation && (
+                    <a
+                      href={`/simulation?type=${experiment.simulation}`}
+                      className="btn btn-primary"
+                    >
+                      Simulation
+                    </a>
                   )}
                 </div>
               </div>
