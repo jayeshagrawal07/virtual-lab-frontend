@@ -12,5 +12,7 @@ export const USER_LOGOUT = 'USER_LOGOUT'
 export const TYPES = {
     DFA: "DFA",
     NDFA: "NDFA",
-    DFA_NFA: "DFA_NFA",
+    NFA_DFA: "NFA_DFA",
+    MEALY: "MEALY",
+    MOORE: "MOORE"
 }
