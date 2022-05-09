@@ -1,5 +1,7 @@
 import { TYPES } from './constants/userConstants';
 
+// use <br> for line break
+
 const experiments = [
 	{
 		_id: '1',
